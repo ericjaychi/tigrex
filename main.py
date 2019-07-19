@@ -56,8 +56,11 @@ class Card:
         card_sets_response = requests.get(prints_search_uri)
 
         for json in card_sets_response.json()[DATA]:
-            # TODO: Pull these values into variables since its a little hard to read.
-            card_set_list.update({json[SET_NAME]:[json[PRICES][USD], json[PRICES][USD_FOIL]]})
+            set_name = json[SET_NAME]
+            normal_price = json[PRICES][USD]
+            foil_price = json[PRICES][USD_FOIL]
+
+            card_set_list.update({set_name:[normal_price, foil_price]})
 
         return card_set_list
 
