@@ -7,6 +7,7 @@ DOLLAR_SIGN = "$"
 EMPTY_STRING = ""
 FORWARD_SLASH = "/"
 FUZZY_SEARCH = "https://api.scryfall.com/cards/named?fuzzy=%s"
+MANA_COST = "mana_cost"
 NAME = "name"
 NEW_LINE = "\n"
 ORACLE_TEXT = "oracle_text"
@@ -29,7 +30,8 @@ class Card:
         response = requests.get(FUZZY_SEARCH % plus_delimited_card_name)
 
         # TODO: Refactor all the print statements into a separate method.
-        print(Card.__get_card_name(response) + NEW_LINE + Card.__get_card_description(response))
+        print(Card.__get_card_name(response) + TAB + Card.__get_card_mana_cost(response) +
+              NEW_LINE + Card.__get_card_description(response))
 
         for set_name, card_prices_usd in Card.__get_card_set_names(response).items():
             normal_price = None
@@ -57,6 +59,7 @@ class Card:
     def __get_card_name(response):
         return response.json()[NAME]
 
+    # TODO: Refactor this method name into something else since it is technically getting both set and prices.
     @staticmethod
     def __get_card_set_names(response):
         card_set_list = dict()
@@ -74,6 +77,11 @@ class Card:
         return card_set_list
 
     @staticmethod
+    def __get_card_mana_cost(response):
+        return response.json()[MANA_COST]
+
+
+    @staticmethod
     def __get_plus_delimited_card_name(*args):
         plus_delimited_card_name = EMPTY_STRING
 
@@ -84,6 +92,8 @@ class Card:
                 plus_delimited_card_name = plus_delimited_card_name + argument + PLUS
 
         return plus_delimited_card_name
+
+    # TODO: Implement a str() method to print the card information out.
 
 
 if __name__ == '__main__':
