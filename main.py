@@ -31,7 +31,7 @@ class Card:
         response = requests.get(FUZZY_SEARCH % plus_delimited_card_name)
 
         # TODO: Refactor all the print statements into a separate method.
-        print(Card.__get_card_name(response) + TAB + Card.__get_card_mana_cost(response) + NEW_LINE)
+        print(Card.__get_card_name(response) + TAB + TAB + Card.__get_card_mana_cost(response) + NEW_LINE)
         print(Card.__get_card_description(response) + NEW_LINE)
 
         for set_name, card_prices_usd in Card.__get_card_set_names(response).items():
