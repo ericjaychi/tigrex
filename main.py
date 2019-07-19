@@ -26,12 +26,23 @@ class Card:
         # TODO: Refactor all the print statements into a separate method.
         print(Card.__get_card_name(response))
 
-        card_price_usd = TAB + TAB + DOLLAR_SIGN + Card.__get_card_prices_usd(response) + \
-                         SPACE + FORWARD_SLASH + SPACE + DOLLAR_SIGN + Card.__get_card_prices_usd_foil(response)
+        for set_name, card_prices_usd in Card.__get_card_set_names(response).items():
+            normal_price = None
+            foil_price = None
 
-        for set_name in Card.__get_card_set_names(response):
             print(TAB + set_name)
-            print(card_price_usd)
+
+            if not card_prices_usd[0] is None:
+                normal_price = card_prices_usd[0]
+            else:
+                normal_price = "N/A"
+
+            if not card_prices_usd[1] is None:
+                foil_price = card_prices_usd[1]
+            else:
+                foil_price = "N/A"
+
+            print(TAB + TAB + DOLLAR_SIGN + normal_price + SPACE + FORWARD_SLASH + SPACE + DOLLAR_SIGN + foil_price)
 
     @staticmethod
     def __get_card_name(response):
@@ -39,24 +50,16 @@ class Card:
 
     @staticmethod
     def __get_card_set_names(response):
-        card_set_list = []
+        card_set_list = dict()
         prints_search_uri = response.json()[PRINTS_SEARCH_URI]
 
         card_sets_response = requests.get(prints_search_uri)
 
         for json in card_sets_response.json()[DATA]:
-            card_set_list.append(json[SET_NAME])
+            # TODO: Pull these values into variables since its a little hard to read.
+            card_set_list.update({json[SET_NAME]:[json[PRICES][USD], json[PRICES][USD_FOIL]]})
 
         return card_set_list
-
-    # TODO: This will need to account for each individual price of the card from whichever set its from.
-    @staticmethod
-    def __get_card_prices_usd(response):
-        return response.json()[PRICES][USD]
-
-    @staticmethod
-    def __get_card_prices_usd_foil(response):
-        return response.json()[PRICES][USD_FOIL]
 
 
 if __name__ == '__main__':
