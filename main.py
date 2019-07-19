@@ -4,9 +4,11 @@ import requests
 
 DATA = "data"
 DOLLAR_SIGN = "$"
+EMPTY_STRING = ""
 FORWARD_SLASH = "/"
 FUZZY_SEARCH = "https://api.scryfall.com/cards/named?fuzzy=%s"
 NAME = "name"
+PLUS = "+"
 PRICES = "prices"
 PRINTS_SEARCH_URI = "prints_search_uri"
 SET_NAME = "set_name"
@@ -19,9 +21,10 @@ USD_FOIL = "usd_foil"
 class Card:
 
     @staticmethod
-    def search(name):
-        # TODO: Need to figure out how to deal with spaces.
-        response = requests.get(FUZZY_SEARCH % name)
+    def search(*args):
+        plus_delimited_card_name = Card.__get_plus_delimited_card_name(*args)
+
+        response = requests.get(FUZZY_SEARCH % plus_delimited_card_name)
 
         # TODO: Refactor all the print statements into a separate method.
         print(Card.__get_card_name(response))
@@ -60,9 +63,21 @@ class Card:
             normal_price = json[PRICES][USD]
             foil_price = json[PRICES][USD_FOIL]
 
-            card_set_list.update({set_name:[normal_price, foil_price]})
+            card_set_list.update({set_name: [normal_price, foil_price]})
 
         return card_set_list
+
+    @staticmethod
+    def __get_plus_delimited_card_name(*args):
+        plus_delimited_card_name = EMPTY_STRING
+
+        for index, argument in enumerate(args):
+            if index == len(args) - 1:
+                plus_delimited_card_name = plus_delimited_card_name + argument
+            else:
+                plus_delimited_card_name = plus_delimited_card_name + argument + PLUS
+
+        return plus_delimited_card_name
 
 
 if __name__ == '__main__':
