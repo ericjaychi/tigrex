@@ -8,6 +8,8 @@ EMPTY_STRING = ""
 FORWARD_SLASH = "/"
 FUZZY_SEARCH = "https://api.scryfall.com/cards/named?fuzzy=%s"
 NAME = "name"
+NEW_LINE = "\n"
+ORACLE_TEXT = "oracle_text"
 PLUS = "+"
 PRICES = "prices"
 PRINTS_SEARCH_URI = "prints_search_uri"
@@ -27,7 +29,7 @@ class Card:
         response = requests.get(FUZZY_SEARCH % plus_delimited_card_name)
 
         # TODO: Refactor all the print statements into a separate method.
-        print(Card.__get_card_name(response))
+        print(Card.__get_card_name(response) + NEW_LINE + Card.__get_card_description(response))
 
         for set_name, card_prices_usd in Card.__get_card_set_names(response).items():
             normal_price = None
@@ -46,6 +48,10 @@ class Card:
                 foil_price = "N/A"
 
             print(TAB + TAB + DOLLAR_SIGN + normal_price + SPACE + FORWARD_SLASH + SPACE + DOLLAR_SIGN + foil_price)
+
+    @staticmethod
+    def __get_card_description(response):
+        return response.json()[ORACLE_TEXT]
 
     @staticmethod
     def __get_card_name(response):
