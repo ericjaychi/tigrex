@@ -7,9 +7,11 @@ DOLLAR_SIGN = "$"
 EMPTY_STRING = ""
 FORWARD_SLASH = "/"
 FUZZY_SEARCH = "https://api.scryfall.com/cards/named?fuzzy=%s"
+LAYOUT = "layout"
 MANA_COST = "mana_cost"
 NAME = "name"
 NEW_LINE = "\n"
+NORMAL = "normal"
 NOT_AVAILABLE = "N/A"
 ORACLE_TEXT = "oracle_text"
 PARENTHESIS_LEFT = "("
@@ -21,6 +23,7 @@ SET = "set"
 SET_NAME = "set_name"
 SPACE = " "
 TAB = "\t"
+TRANSFORM = "transform"
 USD = "usd"
 USD_FOIL = "usd_foil"
 
@@ -32,28 +35,30 @@ class Card:
         plus_delimited_card_name = Card.__get_plus_delimited_card_name(*args)
 
         response = requests.get(FUZZY_SEARCH % plus_delimited_card_name)
+        card_layout = Card.__get_card_layout(response)
 
-        # TODO: Refactor all the print statements into a separate method.
-        print(Card.__get_card_name(response) + TAB + TAB + Card.__get_card_mana_cost(response) + NEW_LINE)
-        print(Card.__get_card_description(response) + NEW_LINE)
+        if card_layout == NORMAL:
+            # TODO: Refactor this logic into its own print method.
+            print(Card.__get_card_name(response) + TAB + TAB + Card.__get_card_mana_cost(response) + NEW_LINE)
+            print(Card.__get_card_description(response) + NEW_LINE)
 
-        for set_name, card_prices_usd in Card.__get_card_set_names(response).items():
-            normal_price = None
-            foil_price = None
+            for set_name, card_prices_usd in Card.__get_card_set_names(response).items():
+                normal_price = None
+                foil_price = None
 
-            print(TAB + set_name)
+                print(TAB + set_name)
 
-            if not card_prices_usd[0] is None:
-                normal_price = card_prices_usd[0]
-            else:
-                normal_price = NOT_AVAILABLE
+                if not card_prices_usd[0] is None:
+                    normal_price = card_prices_usd[0]
+                else:
+                    normal_price = NOT_AVAILABLE
 
-            if not card_prices_usd[1] is None:
-                foil_price = card_prices_usd[1]
-            else:
-                foil_price = NOT_AVAILABLE
+                if not card_prices_usd[1] is None:
+                    foil_price = card_prices_usd[1]
+                else:
+                    foil_price = NOT_AVAILABLE
 
-            print(TAB + TAB + DOLLAR_SIGN + normal_price + SPACE + FORWARD_SLASH + SPACE + DOLLAR_SIGN + foil_price)
+                print(TAB + TAB + DOLLAR_SIGN + normal_price + SPACE + FORWARD_SLASH + SPACE + DOLLAR_SIGN + foil_price)
 
     @staticmethod
     def __get_card_description(response):
@@ -98,6 +103,10 @@ class Card:
                 plus_delimited_card_name = plus_delimited_card_name + argument + PLUS
 
         return plus_delimited_card_name
+
+    @staticmethod
+    def __get_card_layout(response):
+        return response.json()[LAYOUT]
 
     # TODO: Implement a str() method to print the card information out.
 
