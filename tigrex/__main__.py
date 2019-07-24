@@ -12,9 +12,12 @@ NAME = "name"
 NEW_LINE = "\n"
 NOT_AVAILABLE = "N/A"
 ORACLE_TEXT = "oracle_text"
+PARENTHESIS_LEFT = "("
+PARENTHESIS_RIGHT = ")"
 PLUS = "+"
 PRICES = "prices"
 PRINTS_SEARCH_URI = "prints_search_uri"
+SET = "set"
 SET_NAME = "set_name"
 SPACE = " "
 TAB = "\t"
@@ -70,8 +73,11 @@ class Card:
 
         for json in card_sets_response.json()[DATA]:
             set_name = json[SET_NAME]
+            set_code = json[SET].upper()
             normal_price = json[PRICES][USD]
             foil_price = json[PRICES][USD_FOIL]
+
+            set_name = set_name + SPACE + PARENTHESIS_LEFT + set_code + PARENTHESIS_RIGHT
 
             card_set_list.update({set_name: [normal_price, foil_price]})
 
@@ -80,7 +86,6 @@ class Card:
     @staticmethod
     def __get_card_mana_cost(response):
         return response.json()[MANA_COST]
-
 
     @staticmethod
     def __get_plus_delimited_card_name(*args):
