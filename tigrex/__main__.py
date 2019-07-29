@@ -25,6 +25,7 @@ SAGA = "saga"
 SET = "set"
 SET_NAME = "set_name"
 SPACE = " "
+SPLIT = "split"
 TAB = "\t"
 TRANSFORM = "transform"
 TRANSFORM_LINE_BREAK = "---------"
@@ -71,7 +72,7 @@ class Card:
 
         if card_layout == NORMAL or card_layout == MELD or card_layout == SAGA:
             description = response.json()[ORACLE_TEXT]
-        elif card_layout == TRANSFORM:
+        elif card_layout == TRANSFORM or card_layout == SPLIT:
             front_description = response.json()[CARD_FACES][0][ORACLE_TEXT]
             back_description = response.json()[CARD_FACES][1][ORACLE_TEXT]
 
@@ -111,6 +112,9 @@ class Card:
             mana_cost = response.json()[MANA_COST]
         elif card_layout == TRANSFORM:
             mana_cost = response.json()[CARD_FACES][0][MANA_COST]
+        elif card_layout == SPLIT:
+            mana_cost = response.json()[CARD_FACES][0][MANA_COST] + \
+                        SPACE + FORWARD_SLASH + FORWARD_SLASH + SPACE + response.json()[CARD_FACES][1][MANA_COST]
 
         return mana_cost
 
