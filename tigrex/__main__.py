@@ -41,18 +41,9 @@ class Card:
         card_layout = Card.__get_card_layout(response)
 
         # TODO: Refactor this logic into its own print method.
-        if card_layout == NORMAL:
-            print(Card.__get_card_name(response) + TAB + TAB +
-                  Card.__get_card_mana_cost(response, card_layout) + NEW_LINE)
-            print(Card.__get_card_description(response, card_layout) + NEW_LINE)
-        elif card_layout == TRANSFORM:
-            print(Card.__get_card_name(response) + TAB + TAB +
-                  Card.__get_card_mana_cost(response, card_layout) + NEW_LINE)
-            print(Card.__get_card_description(response, card_layout) + NEW_LINE)
-        elif card_layout == MELD:
-            print(Card.__get_card_name(response) + TAB + TAB +
-                  Card.__get_card_mana_cost(response, card_layout) + NEW_LINE)
-            print(Card.__get_card_description(response, card_layout) + NEW_LINE)
+        print(Card.__get_card_name(response) + TAB + TAB +
+              Card.__get_card_mana_cost(response, card_layout) + NEW_LINE)
+        print(Card.__get_card_description(response, card_layout) + NEW_LINE)
 
         # TODO: Move this to a separate method that only brings up a card's price.
         for set_name, card_prices_usd in Card.__get_card_set_names(response).items():
@@ -77,13 +68,15 @@ class Card:
     def __get_card_description(response, card_layout):
         description = EMPTY_STRING
 
-        if card_layout == NORMAL or MELD:
+        if card_layout == NORMAL:
             description = response.json()[ORACLE_TEXT]
         elif card_layout == TRANSFORM:
             front_description = response.json()[CARD_FACES][0][ORACLE_TEXT]
             back_description = response.json()[CARD_FACES][1][ORACLE_TEXT]
 
             description = front_description + NEW_LINE + TRANSFORM_LINE_BREAK + NEW_LINE + back_description
+        elif card_layout == MELD:
+            description = response.json()[ORACLE_TEXT]
 
         return description
 
@@ -115,10 +108,12 @@ class Card:
     def __get_card_mana_cost(response, card_layout):
         mana_cost = EMPTY_STRING
 
-        if card_layout == NORMAL or MELD:
+        if card_layout == NORMAL:
             mana_cost = response.json()[MANA_COST]
         elif card_layout == TRANSFORM:
             mana_cost = response.json()[CARD_FACES][0][MANA_COST]
+        elif card_layout == MELD:
+            mana_cost = response.json()[MANA_COST]
 
         return mana_cost
 
