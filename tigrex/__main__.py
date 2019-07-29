@@ -10,6 +10,7 @@ FORWARD_SLASH = "/"
 FUZZY_SEARCH = "https://api.scryfall.com/cards/named?fuzzy=%s"
 LAYOUT = "layout"
 MANA_COST = "mana_cost"
+MELD = "meld"
 NAME = "name"
 NEW_LINE = "\n"
 NORMAL = "normal"
@@ -48,6 +49,10 @@ class Card:
             print(Card.__get_card_name(response) + TAB + TAB +
                   Card.__get_card_mana_cost(response, card_layout) + NEW_LINE)
             print(Card.__get_card_description(response, card_layout) + NEW_LINE)
+        elif card_layout == MELD:
+            print(Card.__get_card_name(response) + TAB + TAB +
+                  Card.__get_card_mana_cost(response, card_layout) + NEW_LINE)
+            print(Card.__get_card_description(response, card_layout) + NEW_LINE)
 
         # TODO: Move this to a separate method that only brings up a card's price.
         for set_name, card_prices_usd in Card.__get_card_set_names(response).items():
@@ -72,7 +77,7 @@ class Card:
     def __get_card_description(response, card_layout):
         description = EMPTY_STRING
 
-        if card_layout == NORMAL:
+        if card_layout == NORMAL or MELD:
             description = response.json()[ORACLE_TEXT]
         elif card_layout == TRANSFORM:
             front_description = response.json()[CARD_FACES][0][ORACLE_TEXT]
@@ -110,7 +115,7 @@ class Card:
     def __get_card_mana_cost(response, card_layout):
         mana_cost = EMPTY_STRING
 
-        if card_layout == NORMAL:
+        if card_layout == NORMAL or MELD:
             mana_cost = response.json()[MANA_COST]
         elif card_layout == TRANSFORM:
             mana_cost = response.json()[CARD_FACES][0][MANA_COST]
