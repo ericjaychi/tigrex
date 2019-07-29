@@ -36,45 +36,24 @@ USD_FOIL = "usd_foil"
 class Card:
 
     @staticmethod
-    def search(*args):
-        plus_delimited_card_name = Card.__get_plus_delimited_card_name(*args)
-
-        response = requests.get(FUZZY_SEARCH % plus_delimited_card_name)
-        card_layout = Card.__get_card_layout(response)
-
-        # TODO: Refactor this logic into its own print method.
-        print(Card.__get_card_name(response) + TAB + TAB +
-              Card.__get_card_mana_cost(response, card_layout) + NEW_LINE)
-        print(Card.__get_card_description(response, card_layout) + NEW_LINE)
-
-    @staticmethod
     def price(*args):
         plus_delimited_card_name = Card.__get_plus_delimited_card_name(*args)
 
         response = requests.get(FUZZY_SEARCH % plus_delimited_card_name)
         card_layout = Card.__get_card_layout(response)
 
-        print(Card.__get_card_name(response) + TAB + TAB +
-              Card.__get_card_mana_cost(response, card_layout) + NEW_LINE)
+        Card.__print_card_header(response, card_layout)
+        Card.__print_card_price(response)
 
-        # TODO: Move this to a separate method that only brings up a card's price.
-        for set_name, card_prices_usd in Card.__get_card_set_names(response).items():
-            normal_price = None
-            foil_price = None
+    @staticmethod
+    def search(*args):
+        plus_delimited_card_name = Card.__get_plus_delimited_card_name(*args)
 
-            print(TAB + set_name)
+        response = requests.get(FUZZY_SEARCH % plus_delimited_card_name)
+        card_layout = Card.__get_card_layout(response)
 
-            if not card_prices_usd[0] is None:
-                normal_price = card_prices_usd[0]
-            else:
-                normal_price = NOT_AVAILABLE
-
-            if not card_prices_usd[1] is None:
-                foil_price = card_prices_usd[1]
-            else:
-                foil_price = NOT_AVAILABLE
-
-            print(TAB + TAB + DOLLAR_SIGN + normal_price + SPACE + FORWARD_SLASH + SPACE + DOLLAR_SIGN + foil_price)
+        Card.__print_card_header(response, card_layout)
+        Card.__print_card_search(response, card_layout)
 
     @staticmethod
     def __get_card_description(response, card_layout):
@@ -89,6 +68,24 @@ class Card:
             description = front_description + NEW_LINE + TRANSFORM_LINE_BREAK + NEW_LINE + back_description
 
         return description
+
+    @staticmethod
+    def __get_card_layout(response):
+        return response.json()[LAYOUT]
+
+    @staticmethod
+    def __get_card_mana_cost(response, card_layout):
+        mana_cost = EMPTY_STRING
+
+        if card_layout == NORMAL or card_layout == MELD or card_layout == SAGA:
+            mana_cost = response.json()[MANA_COST]
+        elif card_layout == TRANSFORM:
+            mana_cost = response.json()[CARD_FACES][0][MANA_COST]
+        elif card_layout == SPLIT:
+            mana_cost = response.json()[CARD_FACES][0][MANA_COST] + \
+                        SPACE + FORWARD_SLASH + FORWARD_SLASH + SPACE + response.json()[CARD_FACES][1][MANA_COST]
+
+        return mana_cost
 
     @staticmethod
     def __get_card_name(response):
@@ -115,20 +112,6 @@ class Card:
         return card_set_list
 
     @staticmethod
-    def __get_card_mana_cost(response, card_layout):
-        mana_cost = EMPTY_STRING
-
-        if card_layout == NORMAL or card_layout == MELD or card_layout == SAGA:
-            mana_cost = response.json()[MANA_COST]
-        elif card_layout == TRANSFORM:
-            mana_cost = response.json()[CARD_FACES][0][MANA_COST]
-        elif card_layout == SPLIT:
-            mana_cost = response.json()[CARD_FACES][0][MANA_COST] + \
-                        SPACE + FORWARD_SLASH + FORWARD_SLASH + SPACE + response.json()[CARD_FACES][1][MANA_COST]
-
-        return mana_cost
-
-    @staticmethod
     def __get_plus_delimited_card_name(*args):
         plus_delimited_card_name = EMPTY_STRING
 
@@ -141,10 +124,32 @@ class Card:
         return plus_delimited_card_name
 
     @staticmethod
-    def __get_card_layout(response):
-        return response.json()[LAYOUT]
+    def __print_card_header(response, card_layout):
+        print(Card.__get_card_name(response) + TAB + TAB + Card.__get_card_mana_cost(response, card_layout) + NEW_LINE)
 
-    # TODO: Implement a str() method to print the card information out.
+    @staticmethod
+    def __print_card_price(response):
+        for set_name, card_prices_usd in Card.__get_card_set_names(response).items():
+            normal_price = None
+            foil_price = None
+
+            print(TAB + set_name)
+
+            if not card_prices_usd[0] is None:
+                normal_price = card_prices_usd[0]
+            else:
+                normal_price = NOT_AVAILABLE
+
+            if not card_prices_usd[1] is None:
+                foil_price = card_prices_usd[1]
+            else:
+                foil_price = NOT_AVAILABLE
+
+            print(TAB + TAB + DOLLAR_SIGN + normal_price + SPACE + FORWARD_SLASH + SPACE + DOLLAR_SIGN + foil_price)
+
+    @staticmethod
+    def __print_card_search(response, card_layout):
+        print(Card.__get_card_description(response, card_layout) + NEW_LINE)
 
 
 if __name__ == '__main__':
