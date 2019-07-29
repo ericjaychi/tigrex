@@ -21,6 +21,7 @@ PARENTHESIS_RIGHT = ")"
 PLUS = "+"
 PRICES = "prices"
 PRINTS_SEARCH_URI = "prints_search_uri"
+SAGA = "saga"
 SET = "set"
 SET_NAME = "set_name"
 SPACE = " "
@@ -68,15 +69,13 @@ class Card:
     def __get_card_description(response, card_layout):
         description = EMPTY_STRING
 
-        if card_layout == NORMAL:
+        if card_layout == NORMAL or card_layout == MELD or card_layout == SAGA:
             description = response.json()[ORACLE_TEXT]
         elif card_layout == TRANSFORM:
             front_description = response.json()[CARD_FACES][0][ORACLE_TEXT]
             back_description = response.json()[CARD_FACES][1][ORACLE_TEXT]
 
             description = front_description + NEW_LINE + TRANSFORM_LINE_BREAK + NEW_LINE + back_description
-        elif card_layout == MELD:
-            description = response.json()[ORACLE_TEXT]
 
         return description
 
@@ -108,12 +107,10 @@ class Card:
     def __get_card_mana_cost(response, card_layout):
         mana_cost = EMPTY_STRING
 
-        if card_layout == NORMAL:
+        if card_layout == NORMAL or card_layout == MELD or card_layout == SAGA:
             mana_cost = response.json()[MANA_COST]
         elif card_layout == TRANSFORM:
             mana_cost = response.json()[CARD_FACES][0][MANA_COST]
-        elif card_layout == MELD:
-            mana_cost = response.json()[MANA_COST]
 
         return mana_cost
 
