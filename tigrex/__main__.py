@@ -65,21 +65,27 @@ class Card:
 
         if card_layout == NORMAL or card_layout == MELD or card_layout == SAGA:
             if CREATURE in response.json()[TYPE_LINE]:
-                description = response.json()[ORACLE_TEXT] + NEW_LINE + NEW_LINE + \
+                description = response.json()[TYPE_LINE] + NEW_LINE + NEW_LINE + \
+                              response.json()[ORACLE_TEXT] + NEW_LINE + NEW_LINE + \
                               response.json()[POWER] + SPACE + FORWARD_SLASH + SPACE + response.json()[TOUGHNESS]
             else:
-                description = response.json()[ORACLE_TEXT]
+                description = response.json()[TYPE_LINE] + NEW_LINE + NEW_LINE + \
+                              response.json()[ORACLE_TEXT]
         elif card_layout == TRANSFORM or card_layout == SPLIT:
             if CREATURE in response.json()[TYPE_LINE]:
-                front_description = response.json()[CARD_FACES][0][ORACLE_TEXT] + NEW_LINE + NEW_LINE + \
+                front_description = response.json()[CARD_FACES][0][TYPE_LINE] + NEW_LINE + NEW_LINE + \
+                                    response.json()[CARD_FACES][0][ORACLE_TEXT] + NEW_LINE + NEW_LINE + \
                                     response.json()[CARD_FACES][0][POWER] + SPACE + FORWARD_SLASH + SPACE + \
                                     response.json()[CARD_FACES][0][TOUGHNESS]
-                back_description = response.json()[CARD_FACES][1][ORACLE_TEXT] + NEW_LINE + NEW_LINE + \
+                back_description = response.json()[CARD_FACES][0][TYPE_LINE] + NEW_LINE + NEW_LINE + \
+                                   response.json()[CARD_FACES][1][ORACLE_TEXT] + NEW_LINE + NEW_LINE + \
                                    response.json()[CARD_FACES][1][POWER] + SPACE + FORWARD_SLASH + SPACE + \
                                    response.json()[CARD_FACES][1][TOUGHNESS]
             else:
-                front_description = response.json()[CARD_FACES][0][ORACLE_TEXT]
-                back_description = response.json()[CARD_FACES][1][ORACLE_TEXT]
+                front_description = response.json()[CARD_FACES][0][TYPE_LINE] + NEW_LINE + NEW_LINE + \
+                                    response.json()[CARD_FACES][0][ORACLE_TEXT]
+                back_description = response.json()[CARD_FACES][1][TYPE_LINE] + NEW_LINE + NEW_LINE + \
+                                   response.json()[CARD_FACES][1][ORACLE_TEXT]
 
             description = front_description + NEW_LINE + TRANSFORM_LINE_BREAK + NEW_LINE + back_description
 
