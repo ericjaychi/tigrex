@@ -7,7 +7,7 @@ requirements = ["requests<=2.21.0", "fire<=0.1.3"]
 
 setuptools.setup(
     name="tigrex",
-    version="1.1.0",
+    version="1.1.1",
     author="Eric Chi",
     author_email="ericjaychi@gmail.com",
     description="A Magic the Gathering CLI Tool",
@@ -15,7 +15,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     packages=setuptools.find_packages(),
     install_requires=requirements,
-    url="https://github.com/pypa/sampleproject",
+    url="https://github.com/ericjaychi/tigrex",
     classifiers=[
         "Programming Language :: Python :: 3.7",
         "License :: OSI Approved :: MIT License",
