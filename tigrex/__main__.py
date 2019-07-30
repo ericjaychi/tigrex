@@ -64,10 +64,22 @@ class Card:
         description = EMPTY_STRING
 
         if card_layout == NORMAL or card_layout == MELD or card_layout == SAGA:
-            description = response.json()[ORACLE_TEXT]
+            if CREATURE in response.json()[TYPE_LINE]:
+                description = response.json()[ORACLE_TEXT] + NEW_LINE + NEW_LINE + \
+                              response.json()[POWER] + SPACE + FORWARD_SLASH + SPACE + response.json()[TOUGHNESS]
+            else:
+                description = response.json()[ORACLE_TEXT]
         elif card_layout == TRANSFORM or card_layout == SPLIT:
-            front_description = response.json()[CARD_FACES][0][ORACLE_TEXT]
-            back_description = response.json()[CARD_FACES][1][ORACLE_TEXT]
+            if CREATURE in response.json()[TYPE_LINE]:
+                front_description = response.json()[CARD_FACES][0][ORACLE_TEXT] + NEW_LINE + NEW_LINE + \
+                                    response.json()[CARD_FACES][0][POWER] + SPACE + FORWARD_SLASH + SPACE + \
+                                    response.json()[CARD_FACES][0][TOUGHNESS]
+                back_description = response.json()[CARD_FACES][1][ORACLE_TEXT] + NEW_LINE + NEW_LINE + \
+                                   response.json()[CARD_FACES][1][POWER] + SPACE + FORWARD_SLASH + SPACE + \
+                                   response.json()[CARD_FACES][1][TOUGHNESS]
+            else:
+                front_description = response.json()[CARD_FACES][0][ORACLE_TEXT]
+                back_description = response.json()[CARD_FACES][1][ORACLE_TEXT]
 
             description = front_description + NEW_LINE + TRANSFORM_LINE_BREAK + NEW_LINE + back_description
 
@@ -94,16 +106,6 @@ class Card:
     @staticmethod
     def __get_card_name(response):
         return response.json()[NAME]
-
-    @staticmethod
-    def __get_card_power_toughness(response):
-        power_toughness = EMPTY_STRING
-
-        if CREATURE in response.json()[TYPE_LINE]:
-            power_toughness = response.json()[POWER] + SPACE + FORWARD_SLASH + SPACE + response.json()[TOUGHNESS]
-            return power_toughness
-
-        return power_toughness
 
     # TODO: Refactor this method name into something else since it is technically getting both set and prices.
     @staticmethod
@@ -144,8 +146,6 @@ class Card:
     @staticmethod
     def __print_card_price(response):
         for set_name, card_prices_usd in Card.__get_card_set_names(response).items():
-            normal_price = None
-            foil_price = None
 
             print(TAB + set_name)
 
@@ -164,7 +164,6 @@ class Card:
     @staticmethod
     def __print_card_search(response, card_layout):
         print(Card.__get_card_description(response, card_layout) + NEW_LINE)
-        print(Card.__get_card_power_toughness(response))
 
 
 if __name__ == '__main__':
