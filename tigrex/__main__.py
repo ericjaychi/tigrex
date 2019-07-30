@@ -74,16 +74,6 @@ class Card:
         return description
 
     @staticmethod
-    def __get_card_power_toughness(response):
-        power_toughness = EMPTY_STRING
-
-        if CREATURE in response.json()[TYPE_LINE]:
-            power_toughness = response.json()[POWER] + SPACE + FORWARD_SLASH + SPACE + response.json()[TOUGHNESS]
-            return power_toughness
-
-        return power_toughness
-
-    @staticmethod
     def __get_card_layout(response):
         return response.json()[LAYOUT]
 
@@ -104,6 +94,16 @@ class Card:
     @staticmethod
     def __get_card_name(response):
         return response.json()[NAME]
+
+    @staticmethod
+    def __get_card_power_toughness(response):
+        power_toughness = EMPTY_STRING
+
+        if CREATURE in response.json()[TYPE_LINE]:
+            power_toughness = response.json()[POWER] + SPACE + FORWARD_SLASH + SPACE + response.json()[TOUGHNESS]
+            return power_toughness
+
+        return power_toughness
 
     # TODO: Refactor this method name into something else since it is technically getting both set and prices.
     @staticmethod
