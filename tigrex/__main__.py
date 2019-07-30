@@ -3,6 +3,7 @@ import fire
 import requests
 
 CARD_FACES = "card_faces"
+CREATURE = "Creature"
 DATA = "data"
 DOLLAR_SIGN = "$"
 EMPTY_STRING = ""
@@ -31,6 +32,7 @@ TAB = "\t"
 TOUGHNESS = "toughness"
 TRANSFORM = "transform"
 TRANSFORM_LINE_BREAK = "---------"
+TYPE_LINE = "type_line"
 USD = "usd"
 USD_FOIL = "usd_foil"
 
@@ -75,11 +77,11 @@ class Card:
     def __get_card_power_toughness(response):
         power_toughness = EMPTY_STRING
 
-        if response.json()[POWER] is None:
-            return power_toughness
-        else:
+        if CREATURE in response.json()[TYPE_LINE]:
             power_toughness = response.json()[POWER] + SPACE + FORWARD_SLASH + SPACE + response.json()[TOUGHNESS]
             return power_toughness
+
+        return power_toughness
 
     @staticmethod
     def __get_card_layout(response):
