@@ -1,6 +1,6 @@
 # tigrex
 
-Tigrex is a Python CLI Tool for searching and pricing Magic the Gathering cards.
+Tigrex is a Python CLI Tool for searching and pricing Magic the Gathering cards using Scryfall's API.
 
 ## Installation
 
