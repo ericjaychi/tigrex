@@ -19,6 +19,7 @@ ORACLE_TEXT = "oracle_text"
 PARENTHESIS_LEFT = "("
 PARENTHESIS_RIGHT = ")"
 PLUS = "+"
+POWER = "power"
 PRICES = "prices"
 PRINTS_SEARCH_URI = "prints_search_uri"
 SAGA = "saga"
@@ -27,6 +28,7 @@ SET_NAME = "set_name"
 SPACE = " "
 SPLIT = "split"
 TAB = "\t"
+TOUGHNESS = "toughness"
 TRANSFORM = "transform"
 TRANSFORM_LINE_BREAK = "---------"
 USD = "usd"
@@ -68,6 +70,16 @@ class Card:
             description = front_description + NEW_LINE + TRANSFORM_LINE_BREAK + NEW_LINE + back_description
 
         return description
+
+    @staticmethod
+    def __get_card_power_toughness(response):
+        power_toughness = EMPTY_STRING
+
+        if response.json()[POWER] is None:
+            return power_toughness
+        else:
+            power_toughness = response.json()[POWER] + SPACE + FORWARD_SLASH + SPACE + response.json()[TOUGHNESS]
+            return power_toughness
 
     @staticmethod
     def __get_card_layout(response):
@@ -150,6 +162,7 @@ class Card:
     @staticmethod
     def __print_card_search(response, card_layout):
         print(Card.__get_card_description(response, card_layout) + NEW_LINE)
+        print(Card.__get_card_power_toughness(response))
 
 
 if __name__ == '__main__':
