@@ -7,6 +7,7 @@ CREATURE = "Creature"
 DATA = "data"
 DOLLAR_SIGN = "$"
 EMPTY_STRING = ""
+FLIP = "flip"
 FORWARD_SLASH = "/"
 FUZZY_SEARCH = "https://api.scryfall.com/cards/named?fuzzy=%s"
 LAYOUT = "layout"
@@ -71,7 +72,7 @@ class Card:
             else:
                 description = response.json()[TYPE_LINE] + NEW_LINE + NEW_LINE + \
                               response.json()[ORACLE_TEXT]
-        elif card_layout == TRANSFORM or card_layout == SPLIT:
+        elif card_layout == TRANSFORM or card_layout == SPLIT or card_layout == FLIP:
             if CREATURE in response.json()[TYPE_LINE]:
                 front_description = response.json()[CARD_FACES][0][TYPE_LINE] + NEW_LINE + NEW_LINE + \
                                     response.json()[CARD_FACES][0][ORACLE_TEXT] + NEW_LINE + NEW_LINE + \
@@ -101,7 +102,7 @@ class Card:
 
         if card_layout == NORMAL or card_layout == MELD or card_layout == SAGA:
             mana_cost = response.json()[MANA_COST]
-        elif card_layout == TRANSFORM:
+        elif card_layout == TRANSFORM or card_layout == FLIP:
             mana_cost = response.json()[CARD_FACES][0][MANA_COST]
         elif card_layout == SPLIT:
             mana_cost = response.json()[CARD_FACES][0][MANA_COST] + \
