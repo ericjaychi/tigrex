@@ -179,5 +179,9 @@ class Card:
         print(Card.__get_card_description(response, card_layout) + NEW_LINE)
 
 
-if __name__ == '__main__':
+def main():
     fire.Fire(Card)
+
+
+if __name__ == '__main__':
+    main()
