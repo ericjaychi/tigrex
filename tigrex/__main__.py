@@ -20,6 +20,7 @@ NOT_AVAILABLE = "N/A"
 ORACLE_TEXT = "oracle_text"
 PARENTHESIS_LEFT = "("
 PARENTHESIS_RIGHT = ")"
+PLANESWALKER = "Planeswalker"
 PLUS = "+"
 POWER = "power"
 PRICES = "prices"
@@ -78,10 +79,15 @@ class Card:
                                     response.json()[CARD_FACES][0][ORACLE_TEXT] + NEW_LINE + NEW_LINE + \
                                     response.json()[CARD_FACES][0][POWER] + SPACE + FORWARD_SLASH + SPACE + \
                                     response.json()[CARD_FACES][0][TOUGHNESS]
-                back_description = response.json()[CARD_FACES][1][TYPE_LINE] + NEW_LINE + NEW_LINE + \
-                                   response.json()[CARD_FACES][1][ORACLE_TEXT] + NEW_LINE + NEW_LINE + \
-                                   response.json()[CARD_FACES][1][POWER] + SPACE + FORWARD_SLASH + SPACE + \
-                                   response.json()[CARD_FACES][1][TOUGHNESS]
+
+                if PLANESWALKER in response.json()[CARD_FACES][1][TYPE_LINE]:
+                    back_description = response.json()[CARD_FACES][1][TYPE_LINE] + NEW_LINE + NEW_LINE + \
+                                       response.json()[CARD_FACES][1][ORACLE_TEXT]
+                else:
+                    back_description = response.json()[CARD_FACES][1][TYPE_LINE] + NEW_LINE + NEW_LINE + \
+                                       response.json()[CARD_FACES][1][ORACLE_TEXT] + NEW_LINE + NEW_LINE + \
+                                       response.json()[CARD_FACES][1][POWER] + SPACE + FORWARD_SLASH + SPACE + \
+                                       response.json()[CARD_FACES][1][TOUGHNESS]
             else:
                 front_description = response.json()[CARD_FACES][0][TYPE_LINE] + NEW_LINE + NEW_LINE + \
                                     response.json()[CARD_FACES][0][ORACLE_TEXT]
