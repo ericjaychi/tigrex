@@ -1,4 +1,5 @@
 # tigrex
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/ericjaychi?locale.x=en_US)
 
 tigrex is a Python CLI Tool for searching and pricing Magic the Gathering cards using Scryfall's API.
 
@@ -51,6 +52,8 @@ tigrex price [card-name]
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 Please make sure to update tests as appropriate.
+
+Although this is an open source tool, donations are appreciated greatly!
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
