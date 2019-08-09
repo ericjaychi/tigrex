@@ -4,10 +4,21 @@ tigrex is a Python CLI Tool for searching and pricing Magic the Gathering cards 
 
 ## Installation
 
+**pip**
+
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install tigrex.
 
 ```bash
 pip install tigrex
+```
+
+**Cloning**
+
+Clone the repository and run the script locally. This method will mean that each command has to have `python -m tigrex`.
+```bash
+git clone https://github.com/ericjaychi/tigrex.git || git@github.com:ericjaychi/tigrex.git
+cd tigrex/
+python -m tigrex [command]
 ```
 
 ## Usage
