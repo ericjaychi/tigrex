@@ -1,5 +1,5 @@
 # tigrex
-[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/ericjaychi?locale.x=en_US)
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/ericjaychi?locale.x=en_US) ![Release](https://img.shields.io/github/release/ericjaychi/tigrex) 
 
 tigrex is a Python CLI Tool for searching and pricing Magic the Gathering cards using Scryfall's API.
 
@@ -11,6 +11,15 @@ Use the package manager [pip](https://pip.pypa.io/en/stable/) to install tigrex.
 
 ```bash
 pip install tigrex
+```
+
+**Homebrew**
+
+Use Homebrew to install tigrex.
+
+```bash
+brew tap ericjaychi/tigrex
+brew install tigrex
 ```
 
 **Cloning**
