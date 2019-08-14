@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import configparser
 import fire
 import requests
 
@@ -37,6 +38,9 @@ TRANSFORM_LINE_BREAK = "---------"
 TYPE_LINE = "type_line"
 USD = "usd"
 USD_FOIL = "usd_foil"
+
+config = configparser.ConfigParser()
+config.read("config.ini")
 
 
 class Card:
