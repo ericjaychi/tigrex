@@ -4,10 +4,14 @@ import fire
 import requests
 
 CARD_FACES = "card_faces"
+CONFIG_FILE = "config.ini"
 CREATURE = "Creature"
+CURRENCY = "currency"
 DATA = "data"
 DOLLAR_SIGN = "$"
 EMPTY_STRING = ""
+EUR = "eur"
+EUR_SIGN = "€"
 FLIP = "flip"
 FORWARD_SLASH = "/"
 FUZZY_SEARCH = "https://api.scryfall.com/cards/named?fuzzy=%s"
@@ -29,22 +33,28 @@ PRINTS_SEARCH_URI = "prints_search_uri"
 SAGA = "saga"
 SET = "set"
 SET_NAME = "set_name"
+SIGN = "sign"
 SPACE = " "
 SPLIT = "split"
 TAB = "\t"
+TIX = "tix"
+TIX_SIGN = "Tix" + SPACE
 TOUGHNESS = "toughness"
 TRANSFORM = "transform"
 TRANSFORM_LINE_BREAK = "---------"
 TYPE_LINE = "type_line"
 USD = "usd"
 USD_FOIL = "usd_foil"
+USD_SIGN = "$"
 
+# TODO: Move this into a separate method and call it up here.
 config = configparser.ConfigParser()
-config.read("config.ini")
+config.read(CONFIG_FILE)
 
 
 class Card:
 
+    # TODO: Alphabetize the exposed methods.
     @staticmethod
     def price(*args):
         plus_delimited_card_name = Card.__get_plus_delimited_card_name(*args)
@@ -64,6 +74,21 @@ class Card:
 
         Card.__print_card_header(response, card_layout)
         Card.__print_card_search(response, card_layout)
+
+    @staticmethod
+    def currency(args):
+        if args.casefold() == USD.casefold():
+            config[PRICES][CURRENCY] = USD
+            config[PRICES][SIGN] = USD_SIGN
+        elif args.casefold() == EUR.casefold():
+            config[PRICES][CURRENCY] = EUR
+            config[PRICES][SIGN] = EUR_SIGN
+        elif args.casefold() == TIX.casefold():
+            config[PRICES][CURRENCY] = TIX
+            config[PRICES][SIGN] = TIX_SIGN
+
+        with open(CONFIG_FILE, "w") as configfile:
+            config.write(configfile)
 
     @staticmethod
     def __get_card_description(response, card_layout):
