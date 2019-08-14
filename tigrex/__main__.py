@@ -160,7 +160,8 @@ class Card:
         for json in card_sets_response.json()[DATA]:
             set_name = json[SET_NAME]
             set_code = json[SET].upper()
-            normal_price = json[PRICES][USD]
+
+            normal_price = json[PRICES][config[PRICES][CURRENCY]]
             foil_price = json[PRICES][USD_FOIL]
 
             set_name = set_name + SPACE + PARENTHESIS_LEFT + set_code + PARENTHESIS_RIGHT
@@ -201,7 +202,8 @@ class Card:
             else:
                 foil_price = NOT_AVAILABLE
 
-            print(TAB + TAB + DOLLAR_SIGN + normal_price + SPACE + FORWARD_SLASH + SPACE + DOLLAR_SIGN + foil_price)
+            print(TAB + TAB + config[PRICES][SIGN] + normal_price + SPACE +
+                  FORWARD_SLASH + SPACE + DOLLAR_SIGN + foil_price)
 
     @staticmethod
     def __print_card_search(response, card_layout):
