@@ -7,6 +7,8 @@ CARD_FACES = "card_faces"
 CREATURE = "Creature"
 DATA = "data"
 DOLLAR_SIGN = "$"
+EUR_SIGN = "€"
+TIX_SIGN = "tix "
 EMPTY_STRING = ""
 FLIP = "flip"
 FORWARD_SLASH = "/"
@@ -36,7 +38,13 @@ TOUGHNESS = "toughness"
 TRANSFORM = "transform"
 TRANSFORM_LINE_BREAK = "---------"
 TYPE_LINE = "type_line"
+USD = "usd"
+EUR = "eur"
+TIX = "tix"
 USD_FOIL = "usd_foil"
+PRICE = "PRICE"
+SIGN = "SIGN"
+CURRENCY = "CURRENCY"
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -68,15 +76,15 @@ class Card:
     def currency(*args):
         if not len(args) == 1:
             return "Please only provide one value for the currency"
-        if args[0] == 'eur':
-            config['Price']['sign'] = '€'
-            config['Price']['Cur'] = str(args[0])
-        elif args[0] == 'usd':
-            config['Price']['sign'] = '$'
-            config['Price']['Cur'] = str(args[0])
-        elif args[0] == 'tix':
-            config['Price']['sign'] = 'tix '
-            config['Price']['Cur'] = str(args[0])
+        if args[0] == EUR:
+            config[PRICE][SIGN] = EUR_SIGN
+            config[PRICE][CURRENCY] = str(args[0])
+        elif args[0] == USD:
+            config[PRICE][SIGN] = DOLLAR_SIGN
+            config[PRICE][CURRENCY] = str(args[0])
+        elif args[0] == TIX:
+            config[PRICE][SIGN] = TIX_SIGN
+            config[PRICE][CURRENCY] = str(args[0])
         else:
             return "Please only provide, usd, eur or tix as currency options"
 
@@ -157,7 +165,7 @@ class Card:
             set_name = json[SET_NAME]
             set_code = json[SET].upper()
 
-            normal_price = json[PRICES][config['Price']['cur']]
+            normal_price = json[PRICES][config[PRICE]['cur']]
             foil_price = json[PRICES][USD_FOIL]
 
             set_name = set_name + SPACE + PARENTHESIS_LEFT + set_code + PARENTHESIS_RIGHT
@@ -199,7 +207,7 @@ class Card:
             else:
                 foil_price = NOT_AVAILABLE
 
-            print(TAB + TAB + config['Price']['sign'] + normal_price + SPACE +
+            print(TAB + TAB + config[PRICE][SIGN] + normal_price + SPACE +
                   FORWARD_SLASH + SPACE + DOLLAR_SIGN + foil_price)
 
     @staticmethod
