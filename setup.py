@@ -7,7 +7,7 @@ requirements = ["requests<=2.21.0", "fire<=0.1.3"]
 
 setuptools.setup(
     name="tigrex",
-    version="1.2.0",
+    version="1.3.0",
     author="Eric Chi",
     author_email="ericjaychi@gmail.com",
     description="A Magic the Gathering CLI Tool",
