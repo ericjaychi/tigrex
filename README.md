@@ -45,17 +45,23 @@ Fuzzy search will fail if there are multiple results. Examples:`
 - `"path to"` will fail and not bring up the card `Path to Exile`
 
 ## Commands
-**search**
+**search** - Search for an MTG card.
 ```bash
 tigrex search [card-name]
 ```
 ![tigrex search](demo/tigrex-search.gif)
 
-**price**
+**price** - Search for an MTG card price.
 ```
 tigrex price [card-name]
 ```
 ![tigrex search](demo/tigrex-price.gif)
+
+**currency** - Set the currency of the card searches inside of `config.ini` so that price shows in the either USD, EUR, or TIX. Foil prices are only in USD.
+```
+tigrex currency [usd | eur | tix]
+```
+![tigrex search](demo/tigrex-currency.gif)
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
